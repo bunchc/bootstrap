@@ -1,4 +1,5 @@
 #!/bin/bash -
+set -eux
 #title          :bootstrap.sh
 #description    :Pulls in dotfiles, sets up iptables, and installs other \
 #               :packages as needed
@@ -10,17 +11,11 @@
 #bash_version   :3.2.57(1)-release
 #============================================================================
 
-if [ $# -eq 0 ]; then {
-    directory=$(pwd)
-} else {
-    directory=$1
-} fi
-
 # load options
-source "$directory/options.rc"
+source "$directory/bootstrap/options.rc"
 
 # load functions
-source "$directory/functions.rc"
+source "$directory/bootstrap/functions.rc"
 
 main () {
     dotfiles
