@@ -21,9 +21,9 @@ source "$directory/bootstrap/functions.rc"
 
 main () {
     dotfiles
-    install_packages
-    [[ "$ENABLE_ARM" ]] && enable_arm
-    hardening
+    #install_packages
+    #[[ "$ENABLE_ARM" ]] && enable_arm
+    #hardening
 }
 
 main "$@"
