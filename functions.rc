@@ -21,11 +21,10 @@ INT_NET=$(ifconfig $INT_INTF | awk '/inet addr/ {split ($2,A,":"); print A[2]}')
 EXT_NET=$(ifconfig $EXT_INTF | awk '/inet addr/ {split ($2,A,":"); print A[2]}')
 
 dotfiles() {
-    chattr +i $HOME/.ssh/
+    chattr +i "$HOME/.ssh/"
     export github_user=bunchc
     curl -fsSL https://raw.github.com/$github_user/dotfiles/master/bin/dotfiles \
         | sudo bash
-    source $HOME/.bashrc
     chattr +i $HOME/.ssh/
 }
 
@@ -34,8 +33,8 @@ install_rmate() {
     curl -Lo ~/bin/rmate \
         https://raw.githubusercontent.com/textmate/rmate/master/bin/rmate
     chmod a+x ~/bin/rmate
-    [[ "$(ls $HOME/.bash_profile | wc -l 2> /dev/null)" == "1" ]] && {
-        echo 'export PATH="$PATH:$HOME/bin"' >> $HOME/.bash_profile
+    [[ "$(ls "$HOME/.bash_profile" | wc -l 2> /dev/null)" == "1" ]] && {
+        echo 'export PATH="$PATH:$HOME/bin"' >> "$HOME"/.bash_profile
     }
 }
 
