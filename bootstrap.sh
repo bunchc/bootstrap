@@ -11,6 +11,8 @@ set -eux
 #bash_version   :3.2.57(1)-release
 #============================================================================
 
+directory=$(pwd)
+
 # load options
 source "$directory/bootstrap/options.rc"
 
