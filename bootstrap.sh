@@ -10,11 +10,17 @@
 #bash_version   :3.2.57(1)-release
 #============================================================================
 
+if [ $# -eq 0 ]; then {
+    directory=$(pwd)
+} else {
+    directory=$1
+} fi
+
 # load options
-source options.rc
+source "$directory/options.rc"
 
 # load functions
-source functions.rc
+source "$directory/functions.rc"
 
 main () {
     dotfiles
