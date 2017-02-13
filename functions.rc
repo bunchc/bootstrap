@@ -24,7 +24,7 @@ dotfiles() {
     chattr +i "$HOME/.ssh/"
     export github_user=bunchc
     curl -fsSL https://raw.githubusercontent.com/skwp/dotfiles/master/install.sh \
-        sudo sh
+        | sudo sh
     chattr +i "$HOME"/.ssh/
 }
 
