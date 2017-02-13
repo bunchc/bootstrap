@@ -21,7 +21,6 @@ source "$directory/bootstrap/functions.rc"
 
 main () {
     dotfiles
-    stty sane
     install_packages
     [[ "$ENABLE_ARM" ]] && enable_arm
     hardening
