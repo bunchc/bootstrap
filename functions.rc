@@ -42,6 +42,12 @@ install_docker() {
     curl -sL https://get.docker.com/ | sudo bash
 }
 
+install_openshift() {
+    wget https://github.com/openshift/origin/releases/download/v1.4.1/openshift-origin-client-tools-v1.4.1-3f9807a-linux-64bit.tar.gz \
+        -O /tmp/openshift.tar.gz
+    return 0
+}
+
 install_packages() {
     export DEBIAN_FRONTEND=noninteractive
     sudo apt-get update -qq

@@ -21,6 +21,7 @@ source "$directory/bootstrap/functions.rc"
 
 main () {
     dotfiles
+    reset
     install_packages
     [[ "$ENABLE_ARM" ]] && enable_arm
     hardening
