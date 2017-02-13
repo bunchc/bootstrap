@@ -21,7 +21,7 @@ source "$directory/bootstrap/functions.rc"
 
 main () {
     dotfiles
-    reset
+    stty sane
     install_packages
     [[ "$ENABLE_ARM" ]] && enable_arm
     hardening
