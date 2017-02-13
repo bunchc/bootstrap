@@ -23,9 +23,9 @@ EXT_NET=$(ifconfig $EXT_INTF | awk '/inet addr/ {split ($2,A,":"); print A[2]}')
 dotfiles() {
     chattr +i "$HOME/.ssh/"
     export github_user=bunchc
-    curl -fsSL https://raw.github.com/$github_user/dotfiles/master/bin/dotfiles \
-        | sudo bash
-    chattr +i $HOME/.ssh/
+    curl -fsSL https://raw.githubusercontent.com/skwp/dotfiles/master/install.sh \
+        sudo sh
+    chattr +i "$HOME"/.ssh/
 }
 
 install_rmate() {
