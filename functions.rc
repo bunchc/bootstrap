@@ -8,7 +8,7 @@ set -eux
 # and a hids/nids
 
 # Supply your email here
-[[ "$email_address" ]] || email_address="userdata@mailinator.com"
+email_address=${email_address:="userdata@mailinator.com"}
 
 # Other things worth verifying / changing:
 [[ "$(which iptables 2>/dev/null)" ]] && IPTABLES=$(which iptables)
