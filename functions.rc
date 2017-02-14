@@ -155,8 +155,8 @@ configure_iptables(){
     $IPTABLES -A INPUT -i $INT_INTF ! -s $INT_NET -j DROP
 
     ### ACCEPT rules
-    $IPTABLES -A INPUT -i $INT_INTF -p tcp -s $INT_NET --dport 22 -m conntrack --ctstate NEW -j ACCEPT
-    $IPTABLES -A INPUT -i $EXT_INTF -p tcp -s any --dport 22 -m conntrack --ctstate NEW -j ACCEPT
+    $IPTABLES -A INPUT -i $INT_INTF -p tcp -s $INT_NET --dport 22 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+    $IPTABLES -A INPUT -i $EXT_INTF -p tcp --dport 22 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
     $IPTABLES -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
 
     ### default INPUT LOG rule
