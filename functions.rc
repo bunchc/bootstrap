@@ -122,7 +122,7 @@ configure_sysctl() {
 
     # Ignore Directed pings
     net.ipv4.icmp_echo_ignore_all = 1
-    " | suto tee -a /etc/sysctl.conf
+    " | sudo tee -a /etc/sysctl.conf
 
     sudo sysctl -p
 }
