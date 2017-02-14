@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eu
+set -eux
 # functions.rc
 # Authors: Cody Bunch (bunchc@gmail.com)
 #
@@ -21,6 +21,7 @@ INT_NET=$(ifconfig $INT_INTF | awk '/inet addr/ {split ($2,A,":"); print A[2]}')
 EXT_NET=$(ifconfig $EXT_INTF | awk '/inet addr/ {split ($2,A,":"); print A[2]}')
 
 dotfiles() {
+    ehco -e "\n[+] Installing dotfiles\n"
     chattr +i "$HOME/.ssh/"
     export github_user=bunchc
     curl -fsSL https://raw.github.com/$github_user/dotfiles/master/bin/dotfiles \
@@ -29,6 +30,7 @@ dotfiles() {
 }
 
 install_rmate() {
+    ehco -e "\n[+] Installing rmate\n"
     mkdir -p "$HOME"/bin
     curl -Lo ~/bin/rmate \
         https://raw.githubusercontent.com/textmate/rmate/master/bin/rmate
@@ -39,16 +41,19 @@ install_rmate() {
 }
 
 install_docker() {
+    ehco -e "\n[+] Installing docker\n"
     curl -sL https://get.docker.com/ | sudo bash
 }
 
 install_openshift() {
+    ehco -e "\n[+] Installing openshift\n"
     wget https://github.com/openshift/origin/releases/download/v1.4.1/openshift-origin-client-tools-v1.4.1-3f9807a-linux-64bit.tar.gz \
         -O /tmp/openshift.tar.gz
     return 0
 }
 
 install_packages() {
+    ehco -e "\n[+] Installing additional packages\n"
     export DEBIAN_FRONTEND=noninteractive
     sudo apt-get update -qq
 
@@ -67,6 +72,7 @@ install_packages() {
 }
 
 enable_arm() {
+    ehco -e "\n[+] Enabling docker support for ARM\n"
     sudo apt-get install -qqy \
         --force-yes \
         --no-install-recommends \
@@ -78,8 +84,9 @@ enable_arm() {
 }
 
 configure_sysctl() {
+    ehco -e "\n[+] Hardening sysctl\n"
     # Sysctl
-    sudo echo "
+    echo "
     # IP Spoofing protection
     net.ipv4.conf.all.rp_filter = 1
     net.ipv4.conf.default.rp_filter = 1
@@ -115,12 +122,13 @@ configure_sysctl() {
 
     # Ignore Directed pings
     net.ipv4.icmp_echo_ignore_all = 1
-    " >> /etc/sysctl.conf
+    " | suto tee -a /etc/sysctl.conf
 
     sudo sysctl -p
 }
 
 configure_iptables(){
+    ehco -e "\n[+] Configuring IPTABLES\n"
     # Firewall
     # Modified from http://www.cipherdyne.org/LinuxFirewalls/ch01/
 
@@ -188,13 +196,15 @@ configure_iptables(){
     $IPTABLES -A FORWARD -i $INT_INTF ! -s $INT_NET -j DROP
 }
 
-install_ids(){
+install_ids() {
+    ehco -e "\n[+] Installing IDS\n"
     sudo apt-get install -y fail2ban psad aide
     sudo aideinit
     sudo aide -u
 }
 
 log_reporting(){
+    ehco -e "\n[+] Configuring logwatch\n"
     hostname=$(hostname -f)
 
     sudo debconf-set-selections <<< "postfix postfix/mailname string $hostname"
@@ -206,8 +216,10 @@ log_reporting(){
 }
 
 hardening(){
-    configure_sysctl
-    configure_iptables
-    install_ids
-    #log_reporting
+    ehco -e "\n[+] Starting Hardening\n"
+    configure_sysctl; sleep 30
+    configure_iptables; sleep 30
+    log_reporting; sleep 30
+    install_ids; sleep 30
+
 }
