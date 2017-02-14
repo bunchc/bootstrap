@@ -211,15 +211,14 @@ log_reporting(){
     sudo debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
     sudo apt-get install -yf postfix logwatch
 
-    echo "/usr/sbin/logwatch --output mail --mailto ${email_address} --detail high" \
+    echo "/usr/sbin/logwatch --output mail --mailto $email_address --detail high" \
         sudo tee -a /etc/cron.daily/00logwatch
 }
 
 hardening(){
     echo -e "\n[+] Starting Hardening\n"
-    configure_sysctl; sleep 30
-    configure_iptables; sleep 30
-    log_reporting; sleep 30
-    install_ids; sleep 30
-
+    configure_sysctl
+    configure_iptables
+    log_reporting
+    install_ids
 }
