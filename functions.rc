@@ -49,7 +49,10 @@ install_openshift() {
     echo -e "\n[+] Installing openshift\n"
     wget https://github.com/openshift/origin/releases/download/v1.4.1/openshift-origin-client-tools-v1.4.1-3f9807a-linux-64bit.tar.gz \
         -O /tmp/openshift.tar.gz
-    return 0
+    mkdir -p "$HOME"/openshift/
+    tar -zxf /tmp/openshift.tar.gz -C "$HOME"/openshift/
+    mv "$HOME"/openshift/**/oc /usr/sbin/oc
+    rm -rf /tmp/openshift* "$HOME"/openshift*
 }
 
 install_packages() {
