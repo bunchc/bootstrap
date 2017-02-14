@@ -197,13 +197,8 @@ install_ids(){
 log_reporting(){
     hostname=$(hostname -f)
 
-cat > /var/cache/debconf/postfix.preseed <<EOF
-postfix postfix/chattr  boolean false
-postfix postfix/mailname    string  $hostname
-postfix postfix/main_mailer_type    select  Internet Site
-EOF
-
-    sudo debconf-set-selections /var/cache/debconf/postfix.preseed
+    sudo debconf-set-selections <<< "postfix postfix/mailname string $hostname"
+    sudo debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
     sudo apt-get install -yf postfix logwatch
 
     echo "/usr/sbin/logwatch --output mail --mailto ${email_address} --detail high" \
