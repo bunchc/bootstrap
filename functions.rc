@@ -200,7 +200,7 @@ install_ids() {
     echo -e "\n[+] Installing IDS\n"
     sudo apt-get install -y fail2ban psad aide
     sudo aideinit
-    sudo aide -u
+    sudo aide -c /etc/aide/aide.conf --update
 }
 
 log_reporting(){
@@ -220,5 +220,5 @@ hardening(){
     configure_sysctl
     configure_iptables
     log_reporting
-    #install_ids
+    install_ids
 }
