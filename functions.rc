@@ -220,5 +220,5 @@ hardening(){
     configure_sysctl
     configure_iptables
     log_reporting
-    install_ids
+    #install_ids
 }
