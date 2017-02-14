@@ -195,7 +195,7 @@ install_ids(){
 }
 
 log_reporting(){
-    $hostname = `hostname -f`
+    hostname=$(hostname -f)
 
 cat > /var/cache/debconf/postfix.preseed <<EOF
 postfix postfix/chattr  boolean false
@@ -206,9 +206,8 @@ EOF
     sudo debconf-set-selections /var/cache/debconf/postfix.preseed
     sudo apt-get install -yf postfix logwatch
 
-    sudo echo "
-    /usr/sbin/logwatch --output mail --mailto ${email_address} --detail high" \
-        >> /etc/cron.daily/00logwatch
+    echo "/usr/sbin/logwatch --output mail --mailto ${email_address} --detail high" \
+        sudo tee -a /etc/cron.daily/00logwatch
 }
 
 hardening(){
