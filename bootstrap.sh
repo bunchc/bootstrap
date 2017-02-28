@@ -1,29 +1,35 @@
 #!/bin/bash -
-set -eux
 #title          :bootstrap.sh
 #description    :Pulls in dotfiles, sets up iptables, and installs other \
 #               :packages as needed
 #author         :Cody Bunch
 #date           :20170209
 #version        :000
-#usage          :./start.sh
+#usage          :/vagrant/start.sh
 #notes          :
-#bash_version   :3.2.57(1)-release
 #============================================================================
+# Pull in some helpers
+run_dir=$(dirname "$0")
+# shellcheck source=/dev/null
+. "$run_dir/conf"
 
-directory=$(pwd)
-
-# load options
-source "$directory/bootstrap/options.rc"
-
-# load functions
-source "$directory/bootstrap/functions.rc"
+declare functions="${*:-$run_dir/lib/**}"
+for file in $functions; do {
+    # shellcheck source=/dev/null
+    . $file
+} done
 
 main () {
-    dotfiles
-    install_packages
-    [[ "$ENABLE_ARM" ]] && enable_arm
-    hardening
+    [[ "$DOTFILES" = "true" ]] && dotfiles
+    [[ "$INSTALL_PACKAGES" = "true" ]] && install_packages
+    [[ "$ENABLE_ARM" = "true" ]] && enable_arm
+    [[ "$HARDENING" = "true" ]] && hardening
 }
 
-main "$@"
+if [ "$DBG" = "true" ]; then {
+    main "$@"
+} else {
+    log "Debugging enabled" -c "red" -b -u
+    set -e -u -x
+    time { main "$@"; } 2>&1 | tee -a /tmp/bootstrap.log
+} fi

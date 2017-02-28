@@ -1,0 +1,69 @@
+#!/bin/bash -
+#title          :conf
+#description    :Sets envirnment variables for bootstrap.sh
+#author         :Cody Bunch
+#date           :20170228
+#version        :000
+#usage          :source $path_to_file/conf
+#notes          :
+#============================================================================
+
+# Change these to enable or disable major conf areas
+export DOTFILES=${DOTFILES:-true}
+export INSTALL_PACKAGES=${INSTALL_PACKAGES:-true}
+export ENABLE_ARM=${ENABLE_ARM:-true}
+export HARDENING=${HARDENING:-false} # TODO: Change to true when working
+
+# Enable debugging
+export DBG=${DBG:-false}
+
+# Who are we:
+export GITHUB_USER=${GITHUB_USER:-bunchc}
+export EMAIL=${EMAIL:="userdata@mailinator.com"}
+
+# Minor steps
+export INSTALL_DOCKER=${INSTALL_DOCKER:-true}
+export INSTALL_OPENSHIFT=${INSTALL_OPENSHIFT:-true}
+
+# List of packages to install
+export PACKAGES=(
+    screen
+    bfg
+    binutils
+    binwalk
+    cifer
+    dex2jar
+    dns2tcp
+    fcrackzip
+    foremost
+    hashpump
+    hydra
+    john
+    knock
+    netpbm
+    nmap
+    pngcheck
+    socat
+    sqlmap
+    tcpflow
+    tcpreplay
+    tcptrace
+    ucspi-tcp
+    xpdf
+    xz
+    traceroute
+    speedtest_cli
+    ssh-copy-id
+    testssl
+    tree
+    iptables
+)
+
+# Extra firewall rules
+# The hardening script allows ssh by default. To allow more ports
+# Specify the rules here one port per line. To specify a range
+# Separate the start and end ports with a colon. e.g.: 60000:61000
+export RULES=(
+    52698 #rmate
+    60000:61000 #mosh
+)
