@@ -10,6 +10,7 @@
 #============================================================================
 # Pull in some helpers
 run_dir=$(dirname "$0")
+init_file=$run_dir/conf
 
 declare functions="${*:-$run_dir/lib/**}"
 for file in $functions; do {
@@ -21,10 +22,9 @@ for file in $functions; do {
 . "$run_dir/conf"
 
 main () {
-    [[ "$DOTFILES" = "true" ]] && dotfiles
-    [[ "$INSTALL_PACKAGES" = "true" ]] && install_packages
-    [[ "$ENABLE_ARM" = "true" ]] && enable_arm
-    [[ "$HARDENING" = "true" ]] && hardening
+    export prompt_delay=15
+    do_stuff "init"
+    [[ "$HARDENING" = "true" ]] && do_stuff "hardening"
 }
 
 case "$DBG" in

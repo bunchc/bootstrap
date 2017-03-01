@@ -25,16 +25,7 @@ export LOGFILE=${LOGFILE:-/tmp/bootstrap.log}
 
 
 #============================================================================
-# Change these to enable or disable what gets
-# installed as part of the bootstrap
-export DOTFILES=${DOTFILES:-true} # Cowboy's dotfiles
-export INSTALL_PACKAGES=${INSTALL_PACKAGES:-true} # list of things to install
-export HARDENING=${HARDENING:-false} # TODO: Change to true when working
-export INSTALL_DOCKER=${INSTALL_DOCKER:-true} # Docker
-export ENABLE_ARM=${ENABLE_ARM:-true} # Arm support for docker
-export INSTALL_OPENSHIFT=${INSTALL_OPENSHIFT:-true} # Install oc cli
-export INSTALL_CLOUDFORMS=${INSTALL_CLOUDFORMS:-true} # Download manageiq
-export INSTALL_OSA=${INSTALL_OSA:-false} # Install OSA
+# If true, installs a bunch of red/blue team tools
 export INSTALL_RTFM=${INSTALL_RTFM:-fase} # Install red/blue team tools
 #============================================================================
 
