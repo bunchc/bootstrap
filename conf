@@ -8,27 +8,53 @@
 #notes          :
 #============================================================================
 
-# Change these to enable or disable major conf areas
-export DOTFILES=${DOTFILES:-true}
-export INSTALL_PACKAGES=${INSTALL_PACKAGES:-true}
-export ENABLE_ARM=${ENABLE_ARM:-true}
-export HARDENING=${HARDENING:-false} # TODO: Change to true when working
-
-# Enable debugging
-export DBG=${DBG:-false}
-
-# Who are we:
 export GITHUB_USER=${GITHUB_USER:-bunchc}
 export EMAIL=${EMAIL:="userdata@mailinator.com"}
 
-# Minor steps
-export INSTALL_DOCKER=${INSTALL_DOCKER:-true}
-export INSTALL_OPENSHIFT=${INSTALL_OPENSHIFT:-true}
 
-# List of packages to install
-export PACKAGES=(
+#============================================================================
+# Enable debugging
+# Possible values:
+# log = log all console output to $LOGFILE
+# debug = set -e -u -x and log all output to $LOGFILE
+# anything else disables logging.
+
+export DBG=${DBG:-log}
+export LOGFILE=${LOGFILE:-/tmp/bootstrap.log}
+#============================================================================
+
+
+#============================================================================
+# Change these to enable or disable what gets
+# installed as part of the bootstrap
+export DOTFILES=${DOTFILES:-true} # Cowboy's dotfiles
+export INSTALL_PACKAGES=${INSTALL_PACKAGES:-true} # list of things to install
+export HARDENING=${HARDENING:-false} # TODO: Change to true when working
+export INSTALL_DOCKER=${INSTALL_DOCKER:-true} # Docker
+export ENABLE_ARM=${ENABLE_ARM:-true} # Arm support for docker
+export INSTALL_OPENSHIFT=${INSTALL_OPENSHIFT:-true} # Install oc cli
+export INSTALL_CLOUDFORMS=${INSTALL_CLOUDFORMS:-true} # Download manageiq
+export INSTALL_OSA=${INSTALL_OSA:-false} # Install OSA
+export INSTALL_RTFM=${INSTALL_RTFM:-fase} # Install red/blue team tools
+#============================================================================
+
+
+#============================================================================
+# List of packages to install via apt-get
+APT_PACKAGES=(
     screen
-    bfg
+    tmux
+    bmon
+    htop
+    traceroute
+    speedtest_cli
+    ssh-copy-id
+    tree
+    iptables
+)
+
+# Some additional packages if being used for redteam/blueteam work
+RTFM_PACKAGES=(
     binutils
     binwalk
     cifer
@@ -51,14 +77,38 @@ export PACKAGES=(
     ucspi-tcp
     xpdf
     xz
-    traceroute
-    speedtest_cli
-    ssh-copy-id
     testssl
-    tree
-    iptables
 )
+#============================================================================
 
+
+#============================================================================
+# Here is where I had some of the control logic for conflicting options.
+# It's best to leave this alone.
+# You've been warned
+
+# If you'd like to install OSA, we need to disable the things that conflict
+if [ "$INSTALL_OSA" = "true" ]; then {
+    log "OSA Chosen, disabling openshift, cloudforms, docker, and hardening" \
+        -c "blue"
+    export INSTALL_DOCKER=${INSTALL_DOCKER:-false}
+    export INSTALL_OPENSHIFT=${INSTALL_OPENSHIFT:-false}
+    export INSTALL_CLOUDFORMS=${INSTALL_CLOUDFORMS:-false}
+    export HARDENING=${HARDENING:-false}
+} fi
+
+# If the red/blue team tools are chosen, add them to the packages list
+if [ "$INSTALL_RTFM" = "true" ]; then {
+    log "Go go RTFM Tools" -c "blue"
+    export PACKAGES=("${APT_PACKAGES[@]}" "${RTFM_PACKAGES[@]}")
+} else {
+    log "Installing APT_PACKAGES" -C "blue"
+    export PACKAGES=("${APT_PACKAGES[@]}")
+} fi
+
+#============================================================================
+
+#============================================================================
 # Extra firewall rules
 # The hardening script allows ssh by default. To allow more ports
 # Specify the rules here one port per line. To specify a range
@@ -67,3 +117,4 @@ export RULES=(
     52698 #rmate
     60000:61000 #mosh
 )
+#============================================================================

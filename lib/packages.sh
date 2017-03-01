@@ -14,6 +14,7 @@ if [ "$DBG" = "true" ]; then {
     log "packages.sh imported" -c "red" -b -u
 } fi
 
+
 dotfiles() {
     log "Installing dotfiles" -c "blue"
     chattr +i "$HOME/.ssh/"
@@ -21,6 +22,7 @@ dotfiles() {
         | sudo bash
     chattr +i "$HOME"/.ssh/
 }
+
 
 install_rmate() {
     log "Installing rmate" -c "blue"
@@ -33,10 +35,13 @@ install_rmate() {
     }
 }
 
+
 install_docker() {
     log "Installing docker" -c "blue"
     curl -sL https://get.docker.com/ | sudo bash
+    sudo usermod -oG root $USER
 }
+
 
 install_cloudforms() {
     log "Installing CloudForms" -c "blue"
@@ -48,6 +53,7 @@ install_cloudforms() {
     } fi
 }
 
+
 install_openshift() {
     log "Installing OpenShift" -c "blue"
     wget https://github.com/openshift/origin/releases/download/v1.4.1/openshift-origin-client-tools-v1.4.1-3f9807a-linux-64bit.tar.gz \
@@ -57,6 +63,23 @@ install_openshift() {
     mv "$HOME"/openshift/**/oc /usr/sbin/oc
     rm -rf /tmp/openshift* "$HOME"/openshift*
 }
+
+
+install_osa() {
+    log "Checking for conflicts" -c "blue"
+    if [ "$DOTFILES" = "true" ] \
+        || [ "$ENABLE_ARM" = "true" ] \
+        || [ "$INSTALL_DOCKER" = "true" ] \
+        || [ "$HARDENING" = "true" ] \
+        || [ "$INSTALL_OPENSHIFT" = "true" ]; then {
+            log "Unable to install OSA: Conflicting packages" -c "red" -b -u
+            exit
+        } fi
+    log "Installing OSA" -c "blue"
+    git clone "https://github.com/bunchc/rbac_prep" $HOME/rbac_prep
+    bash -c "cd $HOME/rbac_prep; ./rbac_prep.sh"
+}
+
 
 install_packages() {
     log "Installing additional packages" -c "blue"
@@ -75,7 +98,9 @@ install_packages() {
     install_rmate
     [[ "$INSTALL_DOCKER" ]] && install_docker
     [[ "$INSTALL_OPENSHIFT" ]] && install_openshift
+    [[ "$INSTALL_OSA" ]] && install_osa
 }
+
 
 enable_arm() {
     log "Enabling docker support for ARM" -c "cyan"

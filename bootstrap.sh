@@ -10,14 +10,15 @@
 #============================================================================
 # Pull in some helpers
 run_dir=$(dirname "$0")
-# shellcheck source=/dev/null
-. "$run_dir/conf"
 
 declare functions="${*:-$run_dir/lib/**}"
 for file in $functions; do {
     # shellcheck source=/dev/null
     . $file
 } done
+
+# shellcheck source=/dev/null
+. "$run_dir/conf"
 
 main () {
     [[ "$DOTFILES" = "true" ]] && dotfiles
@@ -26,10 +27,20 @@ main () {
     [[ "$HARDENING" = "true" ]] && hardening
 }
 
-if [ "$DBG" = "true" ]; then {
-    main "$@"
-} else {
-    log "Debugging enabled" -c "red" -b -u
-    set -e -u -x
-    time { main "$@"; } 2>&1 | tee -a /tmp/bootstrap.log
-} fi
+case "$DBG" in
+    debug )
+        log "Debugging enabled. Logging to $LOGFILE" -c "red" -b -u
+        log "Starting bootstrap" -c "blue"
+        set -e -u -x
+        time { main "$@"; } 2>&1 | tee -a "$LOGFILE"
+        ;;
+    log )
+        log "Logging output to $LOGFILE" -c "yellow" -u
+        log "Starting bootstrap" -c "blue"
+        time { main "$@"; } 2>&1 | tee -a "$LOGFILE"
+        ;;
+    * )
+        log "Starting bootstrap" -c "blue"
+        main "$@"
+        ;;
+esac
