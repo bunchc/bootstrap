@@ -1,8 +1,8 @@
 #!/usr/bin/env zsh
 # Borrowed from: https://github.com/nathanstilwell/color-logger
 
-typeset -A text_colors background_colors emphasis
-typeset -a formatting
+declare -A text_colors background_colors emphasis
+declare -a formatting
 
 escape="\033[";
 reset="${escape}0m";
