@@ -142,11 +142,11 @@ function setdiff() {
 
 
 ###########################################
-# INTERNAL DOTFILES "INIT" VARS / FUNCTIONS
+# INTERNAL RUN_DIR "INIT" VARS / FUNCTIONS
 ###########################################
 
 # Initialize.
-init_file=$DOTFILES/caches/init/selected
+init_file=$RUN_DIR/caches/init/selected
 function init_files() {
   local i f dirname oses os opt remove
   dirname="$(dirname "$1")"
@@ -207,7 +207,7 @@ function link_do() {
 # Copy, link, init, etc.
 function do_stuff() {
   local base dest skip
-  local files=($DOTFILES/$1/*)
+  local files=($RUN_DIR/$1/*)
   [[ $(declare -f "$1_files") ]] && files=($($1_files "${files[@]}"))
   # No files? abort.
   if (( ${#files[@]} == 0 )); then return; fi
