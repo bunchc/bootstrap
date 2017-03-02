@@ -7,6 +7,8 @@
 #usage          :. /Users/bunchc/Dropbox/Work/projects/bootstarp/lib/menu.sh
 #notes          :http://serverfault.com/a/298312
 #============================================================================
+export RUN_DIR
+RUN_DIR=$(dirname "$0")
 
 # Logging stuff.
 function e_header()   { echo -e "\n\033[1m$@\033[0m"; }

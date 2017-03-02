@@ -9,8 +9,7 @@
 #notes          :
 #============================================================================
 # Pull in some helpers
-export RUN_DIR
-RUN_DIR=$(dirname "$0")
+run_dir=$(dirname "$0")
 
 declare functions="${*:-$run_dir/lib/**}"
 for file in $functions; do {
